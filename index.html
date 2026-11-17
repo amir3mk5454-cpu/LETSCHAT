@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Letschat</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "ضع_API_KEY_هنا",
+  authDomain: "ضع_AUTH_DOMAIN_هنا",
+  projectId: "ضع_PROJECT_ID_هنا",
+  storageBucket: "ضع_STORAGE_BUCKET_هنا",
+  messagingSenderId: "ضع_SENDER_ID_هنا",
+  appId: "ضع_APP_ID_هنا"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.register = async () => {
+ try {
+  await createUserWithEmailAndPassword(auth,email.value,password.value);
+ } catch(e) { alert(e.message); }
+};
+window.login = async () => {
+ try {
+  await signInWithEmailAndPassword(auth,email.value,password.value);
+ } catch(e) { alert(e.message); }
+};
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+ document.getElementById("auth").hidden=!!user;
+ document.getElementById("home").hidden=!user;
+ if(user) document.getElementById("who").textContent=user.email;
+});
+</script>
+<style>
+body{font-family:Arial;background:#eef4ff;margin:0;display:grid;place-items:center;min-height:100vh}
+main{background:white;padding:25px;border-radius:18px;width:85%;max-width:360px;text-align:center;box-shadow:0 5px 25px #ccd8ed}
+h1{color:#1769e0}
+input,button{box-sizing:border-box;width:100%;padding:14px;margin:8px 0;border-radius:10px}
+input{border:1px solid #ccc}
+button{background:#1769e0;color:white;border:0;font-weight:bold}
+</style>
+</head>
+<body>
+<main>
+<h1>Letschat 💬</h1>
+<section id="auth">
+<p>أهلاً بك في Letschat</p>
+<input id="email" type="email" placeholder="البريد الإلكتروني">
+<input id="password" type="password" placeholder="كلمة المرور">
+<button onclick="login()">تسجيل الدخول</button>
+<button onclick="register()">إنشاء حساب جديد</button>
+</section>
+<section id="home" hidden>
+<h2>أهلاً بك!</h2>
+<p id="who"></p>
+<button onclick="logout()">تسجيل الخروج</button>
+</section>
+</main>
+</body>
+</html>
